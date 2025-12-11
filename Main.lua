@@ -5,6 +5,7 @@ local Players = game:GetService("Players")
 local Cam = game.Workspace.CurrentCamera
 
 local abEnabled = true
+local teamCheck = false
 
 local FOVring = Drawing.new("Circle")
 FOVring.Visible = true
@@ -56,9 +57,15 @@ local function getClosestPlayerInFOV(trg_part)
 
                 local obscuringParts = Cam:GetPartsObscuringTarget({part.Position}, player.Character:GetDescendants())
 
-                if distance < last and isVisible and #obscuringParts == 0 and health > 1 and player.Team ~= Players.LocalPlayer.Team and distance < fov then
-                    last = distance
-                    nearest = player
+                if distance < last and isVisible and #obscuringParts == 0 and health > 1 and distance < fov then
+                    if teamCheck and player.Team ~= Players.LocalPlayer.Team then
+                        last = distance
+                        nearest = player
+                    end
+                    if teamCheck = false then
+                        last = distance
+                        nearest = player
+                    end
                 end
             end
         end
@@ -68,11 +75,13 @@ local function getClosestPlayerInFOV(trg_part)
 end
 
 RunService.RenderStepped:Connect(function()
-    updateDrawings()
-    local closest = getClosestPlayerInFOV("Head")
+    if abEnabled then
+            updateDrawings()
+            local closest = getClosestPlayerInFOV("Head")
     
-    if closest and
-        closest.Character:FindFirstChild("Head") then 
+            if closest and
+                closest.Character:FindFirstChild("Head") then 
                 lookAt(closest.Character.Head.Position)
-    end
+            end
+      end
 end)
