@@ -62,7 +62,7 @@ local function getClosestPlayerInFOV(trg_part)
                         last = distance
                         nearest = player
                     end
-                    if teamCheck = false then
+                    if teamChec == false then
                         last = distance
                         nearest = player
                     end
